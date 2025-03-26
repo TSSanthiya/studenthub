@@ -63,14 +63,14 @@ app.post("/send-message", upload.single("file"), async (req, res) => {
 });
 
 // Get Messages by Filters (For Student Dashboard)
+
 app.get("/api/messages", async (req, res) => {
   try {
-    const { department, year, section } = req.query;
+    const { department, section } = req.query;
     let filter = {};
 
-    if (department && department !== "All") filter.department = department;
-    if (year && year !== "All") filter.year = year;
-    if (section && section !== "All") filter.section = section;
+    if (department) filter.department = department;
+    if (section) filter.section = section;
 
     const messages = await Message.find(filter).sort({ timestamp: -1 });
     res.json(messages);
@@ -80,6 +80,7 @@ app.get("/api/messages", async (req, res) => {
   }
 });
 
+
 // Start Server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`)); 

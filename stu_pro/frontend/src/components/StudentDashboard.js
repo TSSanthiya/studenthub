@@ -1,15 +1,23 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "./Navbar";
-import axios from "axios"; // ✅ Import axios for fetching
+import axios from "axios";
 import "./StudentDashboard.css";
 
 const StudentDashboard = () => {
-  const [messages, setMessages] = useState([]); // ✅ Use local state for messages
+  const [messages, setMessages] = useState([]);
+  
+  // ✅ Get student details from localStorage
+  const studentDept = localStorage.getItem("studentDept");
+  const studentSec = localStorage.getItem("studentSec");
 
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/messages");
+        // ✅ Fetch only messages related to the student's department and section
+        const response = await axios.get("http://localhost:5000/api/messages", {
+          params: { department: studentDept, section: studentSec },
+        });
+
         setMessages(response.data);
         console.log("Messages received in StudentDashboard:", response.data);
       } catch (error) {
@@ -18,10 +26,10 @@ const StudentDashboard = () => {
     };
 
     fetchMessages();
-  }, []); // ✅ Fetch messages once on component mount
+  }, [studentDept, studentSec]); // ✅ Fetch data when dept/sec changes
 
   const getTagColor = (tag) => {
-    switch (tag?.toLowerCase()) { // ✅ Prevent errors if tag is null
+    switch (tag?.toLowerCase()) {
       case "urgent":
         return "red";
       case "exam":

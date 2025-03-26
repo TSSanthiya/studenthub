@@ -30,9 +30,15 @@ export default function LoginPage({ setIsAuthenticated, setUserRole }) {
 
       if (response.ok) {
         setIsAuthenticated(true);
-        setUserRole(activeTab); // Set role dynamically
+        setUserRole(activeTab);
         localStorage.setItem("userRole", activeTab);
         localStorage.setItem("token", data.token);
+
+        // ✅ Store student department and section for filtering messages
+        if (activeTab === "student") {
+          localStorage.setItem("studentDept", data.student.dept);
+          localStorage.setItem("studentSec", data.student.sec);
+        }
 
         navigate(activeTab === "student" ? "/student-dashboard" : "/faculty-dashboard");
       } else {
